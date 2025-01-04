@@ -1,12 +1,9 @@
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet} from 'react-native';
 
-import EditScreenInfo from '@/components/EditScreenInfo';
 import { Text, View } from '@/components/Themed';
-import {Link} from "expo-router";
 import {useEffect} from "react";
 import {COIN_LIST, getCoinList} from "@/assets/apis";
 import {useQuery} from "@tanstack/react-query";
-import {SafeAreaView} from "react-native-safe-area-context";
 import {CoinList} from "@/components/CoinList";
 
 export default function TabOneScreen() {
