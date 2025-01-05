@@ -5,6 +5,7 @@ import {useEffect} from "react";
 import {COIN_LIST, getCoinList} from "@/assets/apis";
 import {useQuery} from "@tanstack/react-query";
 import {CoinList} from "@/components/CoinList";
+import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 
 export default function TabOneScreen() {
 
@@ -26,7 +27,7 @@ export default function TabOneScreen() {
   }, [error]);
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{backgroundColor:'#FFF'}}>
       {isLoading &&
           <View style={styles.loadingContainer}>
             <Text>
@@ -42,7 +43,29 @@ export default function TabOneScreen() {
           </View>
       }
       {!isLoading && data &&
-          <CoinList data={data}/>
+          <View>
+            <View
+              style={{
+                padding:20,
+              }}
+            >
+              <View
+                style={{
+                  flexDirection:'row',
+                  backgroundColor:'rgba(213,213,213,0.5)',
+                  alignItems:'center',
+                  padding:5,
+                  borderRadius:10
+                }}
+              >
+                <FontAwesome5 name="search" size={20} color={'000'} />
+                <Text>
+                  Search Coin Pairs
+                </Text>
+              </View>
+            </View>
+            <CoinList data={data}/>
+          </View>
       }
     </SafeAreaView>
   );

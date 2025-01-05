@@ -1,5 +1,4 @@
 import {FlatList, View} from "react-native";
-import {Text} from "@/components/Themed";
 import {useEffect, useState} from "react";
 import {CoinSp} from "@/constants/Types";
 import CoinListRow from "@/components/CoinListRow";

@@ -6,7 +6,10 @@ import {Link} from "expo-router";
 
 function CoinListRow(props: CoinSp) {
     return(
-        <Link href="/chart" style={{}}>
+        <Link href={{
+            pathname:'/chart',
+            params:{test:'st'}
+        }} style={{}}>
         <View
             style={{
                 flexDirection: 'row',
