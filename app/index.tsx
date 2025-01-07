@@ -31,14 +31,14 @@ export default function TabOneScreen() {
       {isLoading &&
           <View style={styles.loadingContainer}>
             <Text>
-              잠시만 기다려 주세요...
+              Please wait...
             </Text>
           </View>
       }
       {error &&
           <View style={styles.loadingContainer}>
             <Text>
-              에러발생. 앱을 다시시작 해주세요.
+              Please re-open the app.
             </Text>
           </View>
       }

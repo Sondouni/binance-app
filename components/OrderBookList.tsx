@@ -9,6 +9,7 @@ import {number} from "prop-types";
 import Colors from "@/constants/Colors";
 import {OrderBookShortListRow} from "@/components/OrderBookListRow";
 import {router} from "expo-router";
+import {useWebSocket} from "@/hooks/useWebSocket";
 
 type OrderBookProps = {
     symbol: string
@@ -21,25 +22,18 @@ function OrderBookList({
     const [orderList, setOrderList] = useRecoilState(orderListState);
     const setOrderPrice = useSetRecoilState(orderPriceState);
 
-    useEffect(() => {
-        const websocket = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth`)
-        websocket.onopen = () => {
-            console.log('connected');
-        }
-        websocket.onmessage = async (event) => {
-            const data = JSON.parse(event.data);
+    useWebSocket({
+        onMessage:async (message) => {
             const result = await getOrderList(symbol);
-            if (data.U < result.lastUpdateId) {
+            if (message.U < result.lastUpdateId) {
                 setOrderList(state => ({
                     ...state,
                     ...result,
                 }));
             }
-        }
-        return () => {
-            websocket.close()
-        }
-    }, []);
+        },
+        url:`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth`,
+    });
 
     return (
         <View style={styles.container}>

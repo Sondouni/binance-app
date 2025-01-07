@@ -6,46 +6,66 @@ import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {coinListState, searchedCoinList} from "@/atom/coinListAtom";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Colors from "@/constants/Colors";
+import {useWebSocket} from "@/hooks/useWebSocket";
 
 export function CoinList({data,inputRef}: { data: CoinType[],inputRef:any }) {
 
-    //todo 렌더링 최적화 방안 고려
+    useWebSocket({
+        onMessage:(message) => {
+            const tempList = message.data.filter((item)=>item.s.slice(-4) === 'USDT');
+            setCoinList(state=>{
+                const newCoinList = state.map((item,index)=>{
+                    const tempObj = {...item};
+                    tempList.forEach((ti)=>{
+                        if(tempObj.symbol === ti.s){
+                            tempObj.lastPrice = ti.c;
+                            tempObj.priceChangePercent = ti.P;
+                        }
+                    });
+                    return tempObj;
+                });
+                return newCoinList;
+            });
+        },
+        url:'wss://stream.binance.com:9443/stream?streams=!ticker@arr',
+    });
+
     const setCoinList = useSetRecoilState(coinListState);
     const coinList = useRecoilValue(searchedCoinList);
 
-    useEffect(() => {
-        const websocket = new WebSocket('wss://stream.binance.com:9443/stream?streams=!ticker@arr')
-        websocket.onopen = () => {
-          console.log('connected');
-        }
-        websocket.onmessage = (event) => {
-          const data = JSON.parse(event.data);
-          // console.log(data,'data');
-          //   data.data.forEach((item,index)=>{
-          //       if(item.s==='BTCUSDT'){
-          //           console.log(item,'??');
-          //       }
-          //   });
-          const tempList = data.data.filter((item)=>item.s.slice(-4) === 'USDT');
-          // console.log(tempList.length,'??');
-          setCoinList(state=>{
-              const newCoinList = state.map((item,index)=>{
-                  const tempObj = {...item};
-                  tempList.forEach((ti)=>{
-                      if(tempObj.symbol === ti.s){
-                          tempObj.lastPrice = ti.c;
-                          tempObj.priceChangePercent = ti.P;
-                      }
-                  });
-                  return tempObj;
-              });
-              return newCoinList;
-          });
-        }
-        return () => {
-          websocket.close()
-        }
-    }, []);
+    // useEffect(() => {
+    //     const websocket = new WebSocket('wss://stream.binance.com:9443/stream?streams=!ticker@arr')
+    //     websocket.onopen = () => {
+    //       console.log('connected');
+    //     }
+    //     websocket.onmessage = (event) => {
+    //       const data = JSON.parse(event.data);
+    //       // console.log(data,'data');
+    //       //   data.data.forEach((item,index)=>{
+    //       //       if(item.s==='BTCUSDT'){
+    //       //           console.log(item,'??');
+    //       //       }
+    //       //   });
+    //       const tempList = data.data.filter((item)=>item.s.slice(-4) === 'USDT');
+    //       // console.log(tempList.length,'??');
+    //       setCoinList(state=>{
+    //           const newCoinList = state.map((item,index)=>{
+    //               const tempObj = {...item};
+    //               tempList.forEach((ti)=>{
+    //                   if(tempObj.symbol === ti.s){
+    //                       tempObj.lastPrice = ti.c;
+    //                       tempObj.priceChangePercent = ti.P;
+    //                   }
+    //               });
+    //               return tempObj;
+    //           });
+    //           return newCoinList;
+    //       });
+    //     }
+    //     return () => {
+    //       websocket.close()
+    //     }
+    // }, []);
 
 
     const renderItem:ListRenderItem<CoinType> = useCallback(({item,index}) => {
