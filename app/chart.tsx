@@ -20,88 +20,79 @@ export default function ChartScreen(params) {
     const orderSymbol = useRecoilValue(orderSymbolState);
 
     useEffect(() => {
-        console.log(orderSymbol,'orderSymbol');
+        console.log(orderSymbol, 'orderSymbol');
     }, [orderSymbol]);
 
-    //todo 캐싱된 데이터 지워주기
-    const {data,isLoading,error} = useQuery<ChartType[]>({
-        queryKey:[COIN_CHART],
-        queryFn:()=>getCoinChart(orderSymbol,'1M')
-    });
-
-
-  return (
-    <SafeAreaView style={styles.container}>
-      <Header title={orderSymbol}/>
-        <CurPriceText/>
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
-        {data &&
-            <BarChartComponent data={data}/>
-        }
-        <OrderBookList symbol={orderSymbol}/>
-      </ScrollView>
-        <View
-            style={{
-                height:50,
-                flexDirection:'row',
-                justifyContent:'flex-end',
-                alignItems:'center',
-                gap:15,
-                paddingHorizontal:25
-            }}
-        >
-            <Pressable
-                onPress={()=>{
-                    router.push('/trade')
-                }}
-                style={{
-                    backgroundColor:Colors.positive,
-                    width:90,
-                    height:35,
-                    borderRadius:10,
-                    alignItems:'center',
-                    justifyContent:'center'
-                }}
+    return (
+        <SafeAreaView style={styles.container}>
+            <Header title={orderSymbol}/>
+            {/*<CurPriceText/>*/}
+            <ScrollView
+                showsVerticalScrollIndicator={false}
             >
-                <Text
-                    style={{
-                        color:'#FFF',
-                        fontWeight:'700',
-                        fontSize:17,
-                    }}
-                >
-                    Buy
-                </Text>
-            </Pressable>
+                <BarChartComponent orderSymbol={orderSymbol}/>
+                <OrderBookList symbol={orderSymbol}/>
+            </ScrollView>
             <View
                 style={{
-                    backgroundColor:Colors.negative,
-                    width:90,
-                    height:35,
-                    borderRadius:10,
-                    alignItems:'center',
-                    justifyContent:'center'
+                    height: 50,
+                    flexDirection: 'row',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    gap: 15,
+                    paddingHorizontal: 25
                 }}
             >
-                <Text
+                <Pressable
+                    onPress={() => {
+                        router.push('/trade')
+                    }}
                     style={{
-                        color:'#FFF',
-                        fontWeight:'700',
-                        fontSize:17,
+                        backgroundColor: Colors.positive,
+                        width: 90,
+                        height: 35,
+                        borderRadius: 10,
+                        alignItems: 'center',
+                        justifyContent: 'center'
                     }}
                 >
-                    Sell
-                </Text>
+                    <Text
+                        style={{
+                            color: '#FFF',
+                            fontWeight: '700',
+                            fontSize: 17,
+                        }}
+                    >
+                        Buy
+                    </Text>
+                </Pressable>
+                <View
+                    style={{
+                        backgroundColor: Colors.negative,
+                        width: 90,
+                        height: 35,
+                        borderRadius: 10,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <Text
+                        style={{
+                            color: '#FFF',
+                            fontWeight: '700',
+                            fontSize: 17,
+                        }}
+                    >
+                        Sell
+                    </Text>
+                </View>
             </View>
-        </View>
-    </SafeAreaView>
-  );
+        </SafeAreaView>
+    );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
+    container: {
+        flex: 1,
+    },
 });

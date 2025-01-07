@@ -20,7 +20,20 @@ export const getCoinList = async () => {
 
 export const getCoinChart = async (s:string,i:string) => {
     const chartList = await fetch(`https://api.binance.com/api/v3/klines?symbol=${s}&interval=${i}&limit=50`).then((response) => response.json());
+
+    let minPrice = 0;
+    let maxPrice = 0;
+
     const calCharList:ChartType[] = chartList.map((item,index) => {
+        if(index===0){
+            minPrice = Number(item[3]);
+        }
+        if(minPrice> Number(item[3])){
+            minPrice = Number(item[3]);
+        }
+        if(maxPrice< Number(item[2])){
+            maxPrice = Number(item[2]);
+        }
         return {
             timestamp:Number(item[0]),
             open: Number(item[1]),
@@ -29,7 +42,11 @@ export const getCoinChart = async (s:string,i:string) => {
             close: Number(item[4]),
         }
     })
-    return calCharList;
+
+    let middleMinPrice = (maxPrice - minPrice)/3 + minPrice ;
+    let middleMaxPrice = (maxPrice - minPrice)/3*2 + minPrice;
+
+    return {calCharList, minPrice, maxPrice, middleMinPrice, middleMaxPrice};
 };
 
 export const getOrderList = async (s:string) => {

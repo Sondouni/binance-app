@@ -3,6 +3,9 @@ export type CoinType = {
     name: string;
     lastPrice: string;
     priceChangePercent: string;
+    highPrice:string;
+    lowPrice:string;
+    volume:string;
 }
 
 export type ChartType = {

@@ -7,6 +7,7 @@ import 'react-native-reanimated';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
 import {RecoilRoot} from "recoil";
+import {configureReanimatedLogger, ReanimatedLogLevel} from "react-native-reanimated";
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -44,6 +45,11 @@ export default function RootLayout() {
 
     return <RootLayoutNav/>;
 }
+
+configureReanimatedLogger({
+    level: ReanimatedLogLevel.error,
+    strict: true, // Reanimated runs in strict mode by default
+});
 
 function RootLayoutNav() {
     const queryClient = new QueryClient();

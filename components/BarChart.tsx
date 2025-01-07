@@ -1,80 +1,140 @@
-import {Dimensions, SafeAreaView, StyleSheet, View, Text, ScrollView} from "react-native";
+import {Dimensions, SafeAreaView, StyleSheet, View, Text, ScrollView, Pressable} from "react-native";
 import {CandlestickChart} from "react-native-wagmi-charts";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {ChartType} from "@/constants/Types";
+import {COIN_CHART, getCoinChart} from "@/assets/apis";
+import Colors from "@/constants/Colors";
+import {useEffect, useState} from "react";
 
-export function BarChartComponent(props) {
+const windowWidth = Dimensions.get('window').width;
+
+const timeList:string[] = ['1m','5m','15m','1h','4h','1d','1M']
+
+export function BarChartComponent(props:{orderSymbol:string}) {
+
+    const queryClient = useQueryClient();
+
+    const [time,setTime] = useState<string>('1M');
+
+    //todo 이렇게 refetch를 하면 안될것같은데... 확인하기
+    const {data,isLoading,error} = useQuery<any>({
+        queryKey:[COIN_CHART,time],
+        queryFn:(t)=>getCoinChart(props.orderSymbol,time)
+    });
+
+    useEffect(() => {
+        return () => {
+            queryClient.removeQueries({ queryKey: [COIN_CHART] });
+        }
+    }, []);
+
     return (
-        <View style={{ maxHeight: 400, }}>
-            <CandlestickChart.Provider data={props.data}>
-                <CandlestickChart>
-                    <CandlestickChart.Candles />
-                    <CandlestickChart.Crosshair>
-                        <CandlestickChart.Tooltip />
-                    </CandlestickChart.Crosshair>
-                </CandlestickChart>
-                {/*<CandlestickChart.PriceText type="open" />*/}
-                {/*<CandlestickChart.PriceText type="high" />*/}
-                {/*<CandlestickChart.PriceText type="low" />*/}
-                {/*<CandlestickChart.PriceText type="close" />*/}
-                {/*<CandlestickChart.DatetimeText />*/}
-            </CandlestickChart.Provider>
+        <View
+            style={{
+                height:450,
+            }}
+        >
+            <ScrollView
+                horizontal={true}
+                bounces={false}
+            >
+                <View style={styles.timeCon}>
+                    <Text
+                        style={styles.timeText}
+                    >
+                        Time
+                    </Text>
+                </View>
+                {timeList.map((t,ti)=>{
+                    return(
+                        <Pressable onPress={()=>setTime(t)} key={t} style={styles.timeCon}>
+                            <Text style={[styles.timeText,t===time?{color: '#000',fontWeight: '600'}:{}]}>
+                                {t}
+                            </Text>
+                        </Pressable>
+                    )
+                })}
+            </ScrollView>
+            {data &&
+                <View style={{ flexDirection:'row' }}>
+                    <CandlestickChart.Provider data={data.calCharList}>
+                        <CandlestickChart
+                            width={windowWidth-80}
+                            height={400}
+                        >
+                            <CandlestickChart.Candles />
+                            <CandlestickChart.Crosshair>
+                                <CandlestickChart.Tooltip />
+                            </CandlestickChart.Crosshair>
+                        </CandlestickChart>
+                    </CandlestickChart.Provider>
+                    <View
+                        style={styles.textContainer}
+                    >
+                        <View
+                            style={styles.textBox}
+                        >
+                            <Text style={styles.text}>
+                                {data.maxPrice}
+                            </Text>
+                        </View>
+
+                        <View
+                            style={styles.textBox}
+                        >
+                            <Text style={styles.text}>
+                                {data.middleMaxPrice}
+                            </Text>
+                        </View>
+                        <View
+                            style={styles.textBox}
+                        >
+                            <Text style={styles.text}>
+                                {data.middleMinPrice}
+                            </Text>
+                        </View>
+                        <View
+                            style={styles.textBox}
+                        >
+                            <Text style={styles.text}>
+                                {data.minPrice}
+                            </Text>
+                        </View>
+                    </View>
+                </View>
+            }
         </View>
     );
 }
 
 
 const styles = StyleSheet.create({
-    currentPrice: {
-        color: "white",
-        fontSize: 30,
-        fontWeight: "600",
-        letterSpacing: 1,
+    textContainer:{
+        // width:80,
+        height:'100%',
+        justifyContent:'space-between',
+        // paddingVertical:10,
+        position:'absolute',
+        width:'100%',
     },
-    name: {
-        color: "white",
-        fontSize: 15,
+    textBox:{
+        borderColor:'rgba(174,174,174,0.5)',
+        borderBottomWidth:0.5,
+        width:'100%',
+        paddingHorizontal:10,
+        alignItems:'flex-end',
     },
-    priceContainer: {
-        padding: 15,
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
+    text:{
+        color:Colors.textGray,
+        fontSize:12,
     },
-    priceChange: {
-        color: "white",
-        fontSize: 17,
-        fontWeight: "500",
+    timeCon:{
+        paddingVertical:5,
+        paddingHorizontal:10,
     },
-    input: {
-        flex: 1,
-        height: 40,
-        margin: 12,
-        borderBottomWidth: 1,
-        borderBottomColor: "white",
-        padding: 10,
-        fontSize: 16,
-        color: "white",
-    },
-    filtersContainer: {
-        flexDirection: "row",
-        justifyContent: "space-around",
-        backgroundColor: "#2B2B2B",
-        paddingVertical: 5,
-        borderRadius: 5,
-        marginVertical: 10,
-        marginBottom: 20
-    },
-    candleStickText: {
-        color: "white",
-        fontWeight: "700",
-    },
-    candleStickDataContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        marginHorizontal: 10,
-        marginTop: 20,
-    },
-    candleStickTextLabel: {
-        color: 'grey',
-        fontSize: 13
+    timeText:{
+        fontSize:15,
+        fontWeight:'400',
+        color:Colors.textGray,
     }
-});
+})

@@ -15,10 +15,16 @@ export const curCoinPriceState = selector({
         const symbol = get(orderListState).symbol;
         let price = '';
         let percent = '';
+        let lp = '';
+        let hp = '';
+        let volume = '';
         coinList.forEach((item,index)=>{
             if(item.symbol===symbol){
                 price = item.lastPrice;
                 percent = item.priceChangePercent;
+                lp = item.lowPrice;
+                hp = item.highPrice;
+                volume = item.volume;
             }
         })
         return {price,percent};
