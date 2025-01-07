@@ -1,11 +1,8 @@
-import {memo, useEffect, useState} from "react";
+import {memo} from "react";
 import {StyleSheet, Text, View} from "react-native";
-import {useQuery} from "@tanstack/react-query";
-import {ChartType} from "@/constants/Types";
-import {COIN_CHART, getCoinChart, getOrderList, ORDER_BOOK} from "@/assets/apis";
+import {getOrderList} from "@/assets/apis";
 import {useRecoilState, useSetRecoilState} from "recoil";
 import {orderListState, orderPriceState} from "@/atom/orderListAtom";
-import {number} from "prop-types";
 import Colors from "@/constants/Colors";
 import {OrderBookShortListRow} from "@/components/OrderBookListRow";
 import {router} from "expo-router";

@@ -1,11 +1,8 @@
-import {InputAccessoryView, Pressable, StyleSheet, TextInput, View} from "react-native";
-import {CoinType} from "@/constants/Types";
-import {memo, useCallback, useRef, useState} from "react";
-import {useRecoilState, useSetRecoilState} from "recoil";
-import {InputAccessory} from "@/components/InputAccessory";
+import {StyleSheet, TextInput, View} from "react-native";
+import {memo} from "react";
+import {useRecoilState} from "recoil";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import {searchCoinState} from "@/atom/coinListAtom";
-import {Text} from "@/components/Themed";
 
 function CoinSearchInput(props:{inputRef:any}) {
 
@@ -16,7 +13,6 @@ function CoinSearchInput(props:{inputRef:any}) {
             style={style.container}
         >
             <FontAwesome5 name="search" size={20} color={'000'} />
-            {/*<TextInput/>*/}
             <TextInput
                 ref={props.inputRef}
                 value={search}

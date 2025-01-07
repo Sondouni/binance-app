@@ -24,7 +24,6 @@ export const shortOrderListState = selector({
             bids:orderList.bids.length>limit?orderList.bids.slice(0,limit):orderList.bids,
             asks:orderList.asks.length>limit?orderList.asks.slice(0,limit):orderList.asks,
         }
-        //10개 끊어서 리턴
     },
 });
 

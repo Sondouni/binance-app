@@ -1,10 +1,7 @@
 import {memo} from "react";
-import {Pressable, View, Text, StyleSheet} from "react-native";
-import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import {TextProps} from "@/components/Themed";
+import {StyleSheet, Text, View} from "react-native";
 import {useRecoilValue} from "recoil";
 import {curCoinPriceState} from "@/atom/coinListAtom";
-import {number} from "prop-types";
 import Colors from "@/constants/Colors";
 
 

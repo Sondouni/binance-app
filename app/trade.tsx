@@ -105,7 +105,6 @@ const styles = StyleSheet.create({
 
     },
     extraView:{
-        //todo header값 + indicator값 빼주기
         height: windowHeight - 150,
         paddingTop: 35,
     },

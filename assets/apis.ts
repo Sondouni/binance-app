@@ -9,7 +9,7 @@ export const getCoinList = async () => {
     const coinList = await fetch('https://api.binance.com/api/v3/ticker/24hr').then((response) => response.json());
     // usdt 찾기
     const usdtList:CoinType[] = [];
-    coinList.forEach((item) => {
+    coinList.forEach((item:any) => {
         if(item.symbol.slice(-4) === 'USDT'){
             item.name = item.symbol.replaceAll('USDT', '');
             usdtList.push(item);
@@ -24,7 +24,7 @@ export const getCoinChart = async (s:string,i:string) => {
     let minPrice = 0;
     let maxPrice = 0;
 
-    const calCharList:ChartType[] = chartList.map((item,index) => {
+    const calCharList:ChartType[] = chartList.map((item:any,index:any) => {
         if(index===0){
             minPrice = Number(item[3]);
         }

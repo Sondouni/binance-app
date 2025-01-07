@@ -1,7 +1,6 @@
-import {Dimensions, SafeAreaView, StyleSheet, View, Text, ScrollView, Pressable} from "react-native";
+import {Dimensions, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
 import {CandlestickChart} from "react-native-wagmi-charts";
 import {useQuery, useQueryClient} from "@tanstack/react-query";
-import {ChartType} from "@/constants/Types";
 import {COIN_CHART, getCoinChart} from "@/assets/apis";
 import Colors from "@/constants/Colors";
 import {useEffect, useState} from "react";

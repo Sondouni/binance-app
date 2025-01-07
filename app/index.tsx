@@ -1,11 +1,10 @@
-import {FlatList, SafeAreaView, StyleSheet, TextInput} from 'react-native';
+import {SafeAreaView, StyleSheet, TextInput} from 'react-native';
 
-import { Text, View } from '@/components/Themed';
+import {Text, View} from '@/components/Themed';
 import {useEffect, useRef} from "react";
 import {COIN_LIST, getCoinList} from "@/assets/apis";
 import {useQuery} from "@tanstack/react-query";
 import {CoinList} from "@/components/CoinList";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import {useSetRecoilState} from "recoil";
 import {coinListState} from "@/atom/coinListAtom";
 import CoinSearchInput from "@/components/CoinSearchInput";

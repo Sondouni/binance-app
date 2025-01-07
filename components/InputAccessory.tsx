@@ -1,4 +1,4 @@
-import { Text, TextProps } from './Themed';
+import {Text} from './Themed';
 import {InputAccessoryView, Pressable, View} from "react-native";
 
 type InputAccessoryProps = {

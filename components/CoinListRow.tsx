@@ -2,7 +2,7 @@ import {Pressable, View} from "react-native";
 import {Text} from "@/components/Themed";
 import {CoinType} from "@/constants/Types";
 import {memo, useCallback} from "react";
-import {Link, router} from "expo-router";
+import {router} from "expo-router";
 import {useSetRecoilState} from "recoil";
 import {orderSymbolState} from "@/atom/orderListAtom";
 import Colors from "@/constants/Colors";
@@ -25,7 +25,6 @@ function CoinListRow(props: CoinType) {
                 paddingVertical:10,
                 paddingHorizontal:20,
                 width:'100%',
-                // marginTop:55
             }}
         >
             <View

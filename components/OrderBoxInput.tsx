@@ -1,6 +1,5 @@
 import {memo, useRef, useState} from "react";
-import {InputAccessoryView, InputAccessoryViewProps, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import {Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import {Feather} from "@expo/vector-icons";
 import {InputAccessory} from "@/components/InputAccessory";
 
@@ -15,9 +14,6 @@ type OrderBoxInputProps = {
 }
 
 function OrderBoxInput(props:OrderBoxInputProps) {
-
-    const [amount,setAmount] = useState<string>('');
-    const [total,setTotal] = useState<string>('');
 
     const inputRef = useRef<TextInput>(null);
 

@@ -1,8 +1,5 @@
-import {memo, useCallback, useRef, useState} from "react";
-import {InputAccessoryView, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
-import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
-import {Feather} from "@expo/vector-icons";
-import {InputAccessory} from "@/components/InputAccessory";
+import {memo, useRef, useState} from "react";
+import {Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import OrderBoxInput from "@/components/OrderBoxInput";
 import {useRecoilState} from "recoil";
 import {orderPriceState} from "@/atom/orderListAtom";
@@ -32,7 +29,6 @@ function OrderBox() {
                         gap:10
                     }}
                 >
-                    {/*todo reanimated로 삼각형 및 컬러체인지?*/}
                     <View
                         style={style.toggle}
                     >

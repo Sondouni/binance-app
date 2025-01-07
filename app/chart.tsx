@@ -1,5 +1,4 @@
-import {SafeAreaView, ScrollView, StyleSheet, View, Text, Pressable} from 'react-native';
-import {useEffect} from "react";
+import {Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
 import {BarChartComponent} from "@/components/BarChart";
 import Header from "@/components/Header";
 import OrderBookList from "@/components/OrderBookList";
@@ -11,10 +10,6 @@ import CurCoinInfo from "@/components/CurCoinInfo";
 
 export default function ChartScreen() {
     const orderSymbol = useRecoilValue(orderSymbolState);
-
-    useEffect(() => {
-        console.log(orderSymbol, 'orderSymbol');
-    }, [orderSymbol]);
 
     return (
         <SafeAreaView style={styles.container}>

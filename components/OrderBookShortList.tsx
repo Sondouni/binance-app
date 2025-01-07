@@ -1,7 +1,7 @@
 import {memo} from "react";
-import {Pressable, StyleSheet, Text, View} from "react-native";
-import { useRecoilValue, useSetRecoilState} from "recoil";
-import { orderPriceState, shortOrderListState} from "@/atom/orderListAtom";
+import {StyleSheet, Text, View} from "react-native";
+import {useRecoilValue, useSetRecoilState} from "recoil";
+import {orderPriceState, shortOrderListState} from "@/atom/orderListAtom";
 import Colors from "@/constants/Colors";
 import CurPriceText from "@/components/CurPriceText";
 import {OrderBookShortListRow} from "@/components/OrderBookShortListRow";
@@ -49,7 +49,6 @@ function OrderBookShortList() {
                     paddingVertical:10,
                 }}
             >
-                {/*todo orderList Selector 이용 현재 ask/bid가격여부 textColor변경*/}
                 <CurPriceText
                     style={{
                         fontSize:20,
