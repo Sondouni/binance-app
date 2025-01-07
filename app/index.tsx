@@ -44,7 +44,7 @@ export default function TabOneScreen() {
       {!isLoading && data &&
           <View style={{flex:1}}>
             <CoinSearchInput inputRef={inputRef}/>
-            <CoinList data={data} inputRef={inputRef}/>
+            <CoinList inputRef={inputRef}/>
           </View>
       }
     </SafeAreaView>

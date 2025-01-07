@@ -8,7 +8,7 @@ import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import Colors from "@/constants/Colors";
 import {useWebSocket} from "@/hooks/useWebSocket";
 
-export function CoinList({data,inputRef}: { data: CoinType[],inputRef:any }) {
+export function CoinList({inputRef}: { inputRef:any }) {
 
     useWebSocket({
         onMessage:(message) => {
