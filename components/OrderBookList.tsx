@@ -4,10 +4,11 @@ import {useQuery} from "@tanstack/react-query";
 import {ChartType} from "@/constants/Types";
 import {COIN_CHART, getCoinChart, getOrderList, ORDER_BOOK} from "@/assets/apis";
 import {useRecoilState, useSetRecoilState} from "recoil";
-import {orderListState} from "@/atom/orderListAtom";
+import {orderListState, orderPriceState} from "@/atom/orderListAtom";
 import {number} from "prop-types";
 import Colors from "@/constants/Colors";
 import {OrderBookShortListRow} from "@/components/OrderBookListRow";
+import {router} from "expo-router";
 
 type OrderBookProps = {
     symbol: string
@@ -18,6 +19,7 @@ function OrderBookList({
                        }: OrderBookProps) {
 
     const [orderList, setOrderList] = useRecoilState(orderListState);
+    const setOrderPrice = useSetRecoilState(orderPriceState);
 
     useEffect(() => {
         const websocket = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth`)
@@ -67,7 +69,10 @@ function OrderBookList({
                                 price={bid[0]}
                                 amount={bid[1]}
                                 isAsk={false}
-                                setOrderPrice={'a'}
+                                onPress={() => {
+                                    setOrderPrice(`${Number(bid[0])}`);
+                                    router.push('/trade')
+                                }}
                             >
                             </OrderBookShortListRow>
                         )
@@ -86,7 +91,10 @@ function OrderBookList({
                                 price={ask[0]}
                                 amount={ask[1]}
                                 isAsk={true}
-                                setOrderPrice={'a'}
+                                onPress={() => {
+                                    setOrderPrice(`${Number(ask[0])}`);
+                                    router.push('/trade')
+                                }}
                             >
                             </OrderBookShortListRow>
                         )

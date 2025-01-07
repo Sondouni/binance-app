@@ -1,7 +1,7 @@
 import {Dimensions, SafeAreaView, ScrollView, StyleSheet} from 'react-native';
 
 import {Text, View} from '@/components/Themed';
-import {useRecoilValue} from "recoil";
+import {useRecoilValue, useResetRecoilState} from "recoil";
 import {orderPriceState, orderSymbolState} from "@/atom/orderListAtom";
 import Header from "@/components/Header";
 import OrderBookShortList from "@/components/OrderBookShortList";
@@ -9,25 +9,32 @@ import OrderBox from '@/components/OrderBox';
 import {curCoinPriceState} from "@/atom/coinListAtom";
 import Colors from "@/constants/Colors";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import {useEffect} from "react";
 const windowHeight = Dimensions.get('window').height;
 
 export default function TradeScreen() {
     const orderSymbol = useRecoilValue(orderSymbolState);
     const curPercent = useRecoilValue(curCoinPriceState).percent;
+    const resetCoinOrder = useResetRecoilState(orderPriceState);
+
+    useEffect(() => {
+        return () => {
+            resetCoinOrder();
+        }
+    }, []);
 
     return (
         <SafeAreaView style={styles.container}>
             <Header title={orderSymbol}/>
-
             <ScrollView
             >
                 <View
                     style={styles.perView}
                 >
                     <Text
-                        style={styles.perText}
+                        style={[styles.perText,{color:Number(curPercent)>0?Colors.positive:Colors.negative}]}
                     >
-                        {curPercent}
+                        {`${Number(curPercent)>0?'+':''}${Number(curPercent)}%`}
                     </Text>
                 </View>
                 <View
@@ -88,7 +95,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff'
     },
     perView:{
-        paddingVertical: 5,
+        marginBottom: 5,
         paddingHorizontal: 15,
     },
     perText:{

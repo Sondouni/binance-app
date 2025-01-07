@@ -5,17 +5,18 @@ type orderBookShortListRowProps = {
     price:string;
     amount:string;
     isAsk:boolean;
-    setOrderPrice:any;
+    onPress:()=>void;
 }
 
 export function OrderBookShortListRow(props:orderBookShortListRowProps) {
     return (
-        <View
+        <Pressable
             style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
                 paddingVertical: 3,
             }}
+            onPress={props.onPress}
         >
             <Text
                 style={{
@@ -31,7 +32,7 @@ export function OrderBookShortListRow(props:orderBookShortListRowProps) {
             >
                 {props.isAsk?Number(props.amount):Number(props.price)}
             </Text>
-        </View>
+        </Pressable>
     );
 }
 

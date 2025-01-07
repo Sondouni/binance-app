@@ -42,7 +42,10 @@ export default function ChartScreen() {
                         Buy
                     </Text>
                 </Pressable>
-                <View
+                <Pressable
+                    onPress={() => {
+                        router.push('/trade')
+                    }}
                     style={styles.btnS}
                 >
                     <Text
@@ -50,7 +53,7 @@ export default function ChartScreen() {
                     >
                         Sell
                     </Text>
-                </View>
+                </Pressable>
             </View>
         </SafeAreaView>
     );
