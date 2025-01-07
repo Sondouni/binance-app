@@ -181,8 +181,6 @@ const style = StyleSheet.create({
         flex:1,
         height:'100%',
         borderRadius:10,
-        borderTopRightRadius:50,
-        borderBottomRightRadius:50,
     },
     toggleR:{
         alignItems:'center',
@@ -190,8 +188,6 @@ const style = StyleSheet.create({
         flex:1,
         height:'100%',
         borderRadius:10,
-        borderTopLeftRadius:50,
-        borderBottomLeftRadius:50,
     },
     toggleT:{
         fontSize:18,
