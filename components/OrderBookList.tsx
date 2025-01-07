@@ -1,5 +1,5 @@
 import {memo, useEffect, useState} from "react";
-import {Text, View} from "react-native";
+import {StyleSheet, Text, View} from "react-native";
 import {useQuery} from "@tanstack/react-query";
 import {ChartType} from "@/constants/Types";
 import {COIN_CHART, getCoinChart, getOrderList, ORDER_BOOK} from "@/assets/apis";
@@ -7,26 +7,17 @@ import {useRecoilState, useSetRecoilState} from "recoil";
 import {orderListState} from "@/atom/orderListAtom";
 import {number} from "prop-types";
 import Colors from "@/constants/Colors";
+import {OrderBookShortListRow} from "@/components/OrderBookListRow";
 
 type OrderBookProps = {
-    symbol:string
+    symbol: string
 };
 
 function OrderBookList({
-    symbol,
-                }: OrderBookProps) {
+                           symbol,
+                       }: OrderBookProps) {
 
-    useEffect(() => {
-        console.log(symbol,'symbol');
-    }, []);
-
-    const [orderList,setOrderList] = useRecoilState(orderListState);
-    const [ol,setOl] = useState([]);
-
-    // const {data,isLoading,error} = useQuery<[]>({
-    //     queryKey:[ORDER_BOOK],
-    //     queryFn:()=>getOrderList(symbol)
-    // });
+    const [orderList, setOrderList] = useRecoilState(orderListState);
 
     useEffect(() => {
         const websocket = new WebSocket(`wss://stream.binance.com:9443/ws/${symbol.toLowerCase()}@depth`)
@@ -36,8 +27,8 @@ function OrderBookList({
         websocket.onmessage = async (event) => {
             const data = JSON.parse(event.data);
             const result = await getOrderList(symbol);
-            if(data.U < result.lastUpdateId){
-                setOrderList(state=> ({
+            if (data.U < result.lastUpdateId) {
+                setOrderList(state => ({
                     ...state,
                     ...result,
                 }));
@@ -48,82 +39,91 @@ function OrderBookList({
         }
     }, []);
 
-    return(
-        <View
-            style={{
-                flexDirection:'row',
-                width:'100%',
-                paddingHorizontal:20,
-                gap:10
-            }}>
+    return (
+        <View style={styles.container}>
             <View
                 style={{
-                    flex:1,
+                    flexDirection: 'row'
                 }}
             >
-                <Text>
-                    Bid
+                <Text
+                    style={styles.ot}
+                >
+                    Order Book
                 </Text>
-                {orderList.bids.map((ask,ai)=>{
-                    return(
-                        <View
-                            style={{
-                                flexDirection:'row',
-                                justifyContent:'space-between',
-                                paddingVertical:3,
-                            }}
-                            key={`ask${ai}${ask[0]}${ask[1]}`}
-                        >
-                            <Text>
-                                {Number(ask[1])}
-                            </Text>
-                            <Text
-                                style={{
-                                    color:Colors.positive
-                                }}
-                            >
-                                {Number(ask[0])}
-                            </Text>
-                        </View>
-                    )
-                })}
             </View>
             <View
-                style={{
-                    flex:1,
-                }}
-            >
-                <Text>
-                    Ask
-                </Text>
-                {orderList.asks.map((ask,ai)=>{
-                    return(
-                        <View
-                            style={{
-                                flexDirection:'row',
-                                justifyContent:'space-between',
-                                paddingVertical:3,
-                            }}
-                            key={`ask${ai}${ask[0]}${ask[1]}`}
-                        >
-                            <Text
-                                style={{
-                                    color:Colors.negative
-                                }}
+                style={styles.orderBookBox}>
+                <View
+                    style={styles.orderRowBox}
+                >
+                    <Text style={styles.orderText}>
+                        Bid
+                    </Text>
+                    {orderList.bids.map((bid, ai) => {
+                        return (
+                            <OrderBookShortListRow
+                                key={`bid${ai}${bid[0]}${bid[1]}`}
+                                price={bid[0]}
+                                amount={bid[1]}
+                                isAsk={false}
+                                setOrderPrice={'a'}
                             >
-                                {Number(ask[0])}
-                            </Text>
-                            <Text>
-                                {Number(ask[1])}
-                            </Text>
-                        </View>
-                    )
-                })}
+                            </OrderBookShortListRow>
+                        )
+                    })}
+                </View>
+                <View
+                    style={styles.orderRowBox}
+                >
+                    <Text style={styles.orderText}>
+                        Ask
+                    </Text>
+                    {orderList.asks.map((ask, ai) => {
+                        return (
+                            <OrderBookShortListRow
+                                key={`ask${ai}${ask[0]}${ask[1]}`}
+                                price={ask[0]}
+                                amount={ask[1]}
+                                isAsk={true}
+                                setOrderPrice={'a'}
+                            >
+                            </OrderBookShortListRow>
+                        )
+                    })}
+                </View>
             </View>
         </View>
-)
+    )
 }
 
 
-
 export default memo(OrderBookList);
+
+const styles = StyleSheet.create({
+    container: {paddingHorizontal: 20,marginTop:15},
+    ot:{
+        fontSize: 15,
+        fontWeight: '600',
+        backgroundColor: 'rgba(119,119,119,0.2)',
+        paddingVertical: 3,
+        paddingHorizontal: 10,
+        borderRadius: 10
+    },
+    orderBookBox:{
+        flexDirection: 'row',
+        width: '100%',
+        gap: 10,
+        marginTop:10
+    },
+    orderText:{
+        fontSize:15,
+        fontWeight:'400',
+        color:Colors.textGray,
+        marginBottom:5,
+    },
+    orderRowBox:{
+        flex: 1,
+
+    }
+})

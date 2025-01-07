@@ -6,6 +6,7 @@ export type CoinType = {
     highPrice:string;
     lowPrice:string;
     volume:string;
+    count:string;
 }
 
 export type ChartType = {

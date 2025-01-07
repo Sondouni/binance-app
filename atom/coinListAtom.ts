@@ -8,6 +8,11 @@ export const coinListState = atom<CoinType[]>({
     default:[]
 });
 
+export const searchCoinState = atom<string>({
+    key:'searchCoin',
+    default:'',
+})
+
 export const curCoinPriceState = selector({
     key: 'curCoinPrice',
     get: ({get}) => {
@@ -18,6 +23,7 @@ export const curCoinPriceState = selector({
         let lp = '';
         let hp = '';
         let volume = '';
+        let count = '';
         coinList.forEach((item,index)=>{
             if(item.symbol===symbol){
                 price = item.lastPrice;
@@ -25,9 +31,18 @@ export const curCoinPriceState = selector({
                 lp = item.lowPrice;
                 hp = item.highPrice;
                 volume = item.volume;
+                count = item.count;
             }
         })
-        return {price,percent};
+        return {price,percent,lp,volume,hp,count};
     },
 });
 
+export const searchedCoinList = selector<CoinType[]>({
+    key:'searchedCoinList',
+    get:({get}) => {
+        const coinList = get(coinListState);
+        const text = get(searchCoinState);
+        return text===''?coinList:coinList.filter((coin)=> coin.name.includes(text));
+    }
+})

@@ -2,13 +2,14 @@ import {FlatList, View} from "react-native";
 import {useEffect, useState} from "react";
 import {CoinType} from "@/constants/Types";
 import CoinListRow from "@/components/CoinListRow";
-import {useRecoilState} from "recoil";
-import {coinListState} from "@/atom/coinListAtom";
+import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
+import {coinListState, searchedCoinList} from "@/atom/coinListAtom";
 
 export function CoinList({data}: { data: CoinType[] }) {
 
     //todo 렌더링 최적화 방안 고려
-    const [coinList,setCoinList] = useRecoilState(coinListState);
+    const setCoinList = useSetRecoilState(coinListState);
+    const coinList = useRecoilValue(searchedCoinList);
 
     useEffect(() => {
         const websocket = new WebSocket('wss://stream.binance.com:9443/stream?streams=!ticker@arr')
