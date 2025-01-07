@@ -1,16 +1,22 @@
-import {View} from "react-native";
+import {Pressable, View} from "react-native";
 import {Text} from "@/components/Themed";
-import {CoinSp} from "@/constants/Types";
-import {memo} from "react";
-import {Link} from "expo-router";
+import {CoinType} from "@/constants/Types";
+import {memo, useCallback} from "react";
+import {Link, router} from "expo-router";
+import {useSetRecoilState} from "recoil";
+import {orderSymbolState} from "@/atom/orderListAtom";
 
-function CoinListRow(props: CoinSp) {
+function CoinListRow(props: CoinType) {
+
+    const setOrderSymbol = useSetRecoilState(orderSymbolState);
+    const onPress = useCallback(()=>{
+        setOrderSymbol(props.symbol);
+        router.push('/chart');
+    },[]);
+
     return(
-        <Link href={{
-            pathname:'/chart',
-            params:{test:'st'}
-        }} style={{}}>
-        <View
+        <Pressable
+            onPress={onPress}
             style={{
                 flexDirection: 'row',
                 justifyContent: 'space-between',
@@ -80,8 +86,7 @@ function CoinListRow(props: CoinSp) {
                 </View>
 
             </View>
-        </View>
-        </Link>
+        </Pressable>
     )
 }
 

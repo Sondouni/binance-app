@@ -6,8 +6,12 @@ import {COIN_LIST, getCoinList} from "@/assets/apis";
 import {useQuery} from "@tanstack/react-query";
 import {CoinList} from "@/components/CoinList";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
+import {useSetRecoilState} from "recoil";
+import {coinListState} from "@/atom/coinListAtom";
 
 export default function TabOneScreen() {
+
+  const setCoinList = useSetRecoilState(coinListState);
 
   const {data,isLoading,error} = useQuery({
     queryKey:[COIN_LIST],
@@ -15,16 +19,10 @@ export default function TabOneScreen() {
   });
 
   useEffect(() => {
-    console.log(data?.length,'data');
+    if(data){
+      setCoinList(data);
+    }
   }, [data]);
-
-  useEffect(() => {
-    console.log(isLoading,'isLoading');
-  }, [isLoading]);
-
-  useEffect(() => {
-    console.log(error,'error');
-  }, [error]);
 
   return (
     <SafeAreaView style={{backgroundColor:'#FFF'}}>

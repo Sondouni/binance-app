@@ -1,13 +1,14 @@
 //코인리스트 가져오기
-import {ChartType, CoinSp} from "@/constants/Types";
+import {ChartType, CoinType} from "@/constants/Types";
 
 export const COIN_LIST = 'COIN_LIST';
 export const COIN_CHART = 'COIN_CHART';
+export const ORDER_BOOK = 'ORDER_BOOK';
 
 export const getCoinList = async () => {
     const coinList = await fetch('https://api.binance.com/api/v3/ticker/24hr').then((response) => response.json());
     // usdt 찾기
-    const usdtList:CoinSp[] = [];
+    const usdtList:CoinType[] = [];
     coinList.forEach((item) => {
         if(item.symbol.slice(-4) === 'USDT'){
             item.name = item.symbol.replaceAll('USDT', '');
@@ -29,4 +30,9 @@ export const getCoinChart = async (s:string,i:string) => {
         }
     })
     return calCharList;
+};
+
+export const getOrderList = async (s:string) => {
+    const orderList = await fetch(`https://api.binance.com/api/v3/depth?symbol=${s}&limit=50`).then((response) => response.json());
+    return orderList;
 };

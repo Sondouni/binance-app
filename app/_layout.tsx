@@ -1,14 +1,12 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import {DarkTheme, DefaultTheme, ThemeProvider} from '@react-navigation/native';
 import {useFonts} from 'expo-font';
 import {Stack} from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import {useEffect} from 'react';
 import 'react-native-reanimated';
-
-import {useColorScheme} from '@/components/useColorScheme';
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {GestureHandlerRootView} from "react-native-gesture-handler";
+import {RecoilRoot} from "recoil";
 
 export {
     // Catch any errors thrown by the Layout component.
@@ -51,12 +49,15 @@ function RootLayoutNav() {
     const queryClient = new QueryClient();
     return (
         <GestureHandlerRootView>
-            <QueryClientProvider client={queryClient}>
-                <Stack>
-                    <Stack.Screen name="(tabs)" options={{headerShown: false}}/>
-                    <Stack.Screen name="chart" options={{headerShown: false}}/>
-                </Stack>
-            </QueryClientProvider>
+            <RecoilRoot>
+                <QueryClientProvider client={queryClient}>
+                    <Stack>
+                        <Stack.Screen name="index" options={{headerShown: false}}/>
+                        <Stack.Screen name="chart" options={{headerShown: false}}/>
+                        <Stack.Screen name="trade" options={{headerShown: false}}/>
+                    </Stack>
+                </QueryClientProvider>
+            </RecoilRoot>
         </GestureHandlerRootView>
     );
 }

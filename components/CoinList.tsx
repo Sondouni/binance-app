@@ -1,12 +1,15 @@
 import {FlatList, View} from "react-native";
 import {useEffect, useState} from "react";
-import {CoinSp} from "@/constants/Types";
+import {CoinType} from "@/constants/Types";
 import CoinListRow from "@/components/CoinListRow";
+import {useRecoilState} from "recoil";
+import {coinListState} from "@/atom/coinListAtom";
 
-export function CoinList({data}: { data: CoinSp[] }) {
+export function CoinList({data}: { data: CoinType[] }) {
 
     //todo 렌더링 최적화 방안 고려
-    const [coinList,setCoinList] = useState(data);
+    const [coinList,setCoinList] = useRecoilState(coinListState);
+
     useEffect(() => {
         const websocket = new WebSocket('wss://stream.binance.com:9443/stream?streams=!ticker@arr')
         websocket.onopen = () => {
@@ -24,13 +27,14 @@ export function CoinList({data}: { data: CoinSp[] }) {
           // console.log(tempList.length,'??');
           setCoinList(state=>{
               const newCoinList = state.map((item,index)=>{
+                  const tempObj = {...item};
                   tempList.forEach((ti)=>{
-                      if(item.symbol === ti.s){
-                          item.lastPrice = ti.c;
-                          item.priceChangePercent = ti.P;
+                      if(tempObj.symbol === ti.s){
+                          tempObj.lastPrice = ti.c;
+                          tempObj.priceChangePercent = ti.P;
                       }
                   });
-                  return item;
+                  return tempObj;
               });
               return newCoinList;
           });
@@ -39,6 +43,10 @@ export function CoinList({data}: { data: CoinSp[] }) {
           websocket.close()
         }
     }, []);
+
+    useEffect(() => {
+        // console.log(coinList.length,'?');
+    }, [coinList]);
 
     const renderItem = ({item,index}) => {
         return (

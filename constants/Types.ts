@@ -1,4 +1,4 @@
-export type CoinSp = {
+export type CoinType = {
     symbol: string;
     name: string;
     lastPrice: string;
@@ -6,6 +6,14 @@ export type CoinSp = {
 }
 
 export type ChartType = {
+    timestamp:number;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+}
+
+export type OrderType = {
     timestamp:number;
     open: number;
     high: number;
