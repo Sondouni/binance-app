@@ -1,51 +1,81 @@
-import {memo, useEffect, useState} from "react";
-import {Text, View} from "react-native";
-import {useQuery} from "@tanstack/react-query";
-import {ChartType} from "@/constants/Types";
-import {COIN_CHART, getCoinChart, getOrderList, ORDER_BOOK} from "@/assets/apis";
-import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
-import {orderListState, shortOrderListState} from "@/atom/orderListAtom";
-import {number} from "prop-types";
+import {memo} from "react";
+import {Pressable, StyleSheet, Text, View} from "react-native";
+import { useRecoilValue, useSetRecoilState} from "recoil";
+import { orderPriceState, shortOrderListState} from "@/atom/orderListAtom";
 import Colors from "@/constants/Colors";
 import CurPriceText from "@/components/CurPriceText";
+import {OrderBookShortListRow} from "@/components/OrderBookShortListRow";
 
-type OrderBookShortProps = {
-    symbol:string
-};
 
-function OrderBookShortList({
-    symbol,
-                }: OrderBookShortProps) {
+function OrderBookShortList() {
 
     const orderList = useRecoilValue(shortOrderListState);
+    const setOrderPrice = useSetRecoilState(orderPriceState);
 
     return(
-        <View>
+        <View
+            style={{
+                paddingRight:15
+            }}
+        >
+            <View
+                style={styles.infoView}
+            >
+                <View>
+                    <Text style={styles.infoText}>
+                        Price
+                    </Text>
+                    <Text style={styles.infoText}>
+                        (USDT)
+                    </Text>
+                </View>
+                <View>
+                    <Text style={styles.infoText}>
+                        Amount
+                    </Text>
+                    <Text style={styles.infoText}>
+                        (BTC)
+                    </Text>
+                </View>
+            </View>
             {[...orderList.asks].reverse().map((ask,ai)=>{
                 return(
-                    <View>
-                        <Text>
-                            {ask[0]}
-                        </Text>
-                    </View>
+                    <OrderBookShortListRow key={`${ask[0]}${ask[1]}${ai}`} price={ask[0]} amount={ask[1]} isAsk={true} setOrderPrice={setOrderPrice}/>
                 )
             })}
-            <View>
-                <CurPriceText/>
+            <View
+                style={{
+                    alignItems:'center',
+                    paddingVertical:10,
+                }}
+            >
+                {/*todo orderList Selector 이용 현재 ask/bid가격여부 textColor변경*/}
+                <CurPriceText
+                    style={{
+                        fontSize:20,
+                        fontWeight:'600'
+                    }}
+                />
             </View>
             {orderList.bids.map((bid,bi)=>{
                 return(
-                    <View>
-                        <Text>
-                            {bid[0]}
-                        </Text>
-                    </View>
+                    <OrderBookShortListRow key={`${bid[0]}${bid[1]}${bi}`} price={bid[0]} amount={bid[1]} isAsk={false} setOrderPrice={setOrderPrice}/>
                 )
             })}
         </View>
 )
 }
 
-
-
 export default memo(OrderBookShortList);
+
+const styles = StyleSheet.create({
+    infoText:{
+        color:Colors.textGray,
+        fontSize:13
+    },
+    infoView:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        marginBottom:5,
+    }
+})

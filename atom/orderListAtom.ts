@@ -1,6 +1,5 @@
 import {atom, selector} from "recoil";
 
-
 export const orderListState = atom({
     key:'orderList',
     default:{
@@ -11,13 +10,19 @@ export const orderListState = atom({
     },
 });
 
+export const orderPriceState = atom<string>({
+    key:'orderPrice',
+    default:''
+})
+
 export const shortOrderListState = selector({
     key: 'orderShortList',
     get: ({get}) => {
         const orderList = get(orderListState);
+        const limit = 7;
         return {
-            bids:orderList.bids.length>10?orderList.bids.slice(0,10):orderList.bids,
-            asks:orderList.asks.length>10?orderList.asks.slice(0,10):orderList.asks,
+            bids:orderList.bids.length>limit?orderList.bids.slice(0,limit):orderList.bids,
+            asks:orderList.asks.length>limit?orderList.asks.slice(0,limit):orderList.asks,
         }
         //10개 끊어서 리턴
     },

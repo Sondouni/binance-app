@@ -9,11 +9,11 @@ import {number} from "prop-types";
 
 function CurPriceText(props: TextProps) {
 
-    const curCoinPrice = useRecoilValue(curCoinPriceState);
+    const {price,percent} = useRecoilValue(curCoinPriceState);
 
     return(
         <Text {...props}>
-            {Number(curCoinPrice)}
+            {Number(price)}
         </Text>
 )
 }

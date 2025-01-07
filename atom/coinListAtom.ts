@@ -14,12 +14,14 @@ export const curCoinPriceState = selector({
         const coinList = get(coinListState);
         const symbol = get(orderListState).symbol;
         let price = '';
+        let percent = '';
         coinList.forEach((item,index)=>{
             if(item.symbol===symbol){
                 price = item.lastPrice;
+                percent = item.priceChangePercent;
             }
         })
-        return price;
+        return {price,percent};
     },
 });
 

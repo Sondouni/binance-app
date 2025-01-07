@@ -18,5 +18,8 @@ export default {
     tabIconSelected: tintColorDark,
   },
   positive:'#0ecb81',
-  negative:'red',
+  positiveBack:'rgba(14,203,129,0.1)',
+  negative:'#f43030',
+  negativeBack:'rgba(244,48,48,0.1)',
+  textGray:'#777'
 };

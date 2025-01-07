@@ -19,7 +19,6 @@ function Header({
                 width: '100%',
                 height: 35,
                 flexDirection:'row',
-                backgroundColor:'red'
             }}>
             {backBtn && (
                 <Pressable
