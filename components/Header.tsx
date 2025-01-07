@@ -1,6 +1,7 @@
 import {memo} from "react";
 import {Pressable, View, Text} from "react-native";
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import {router} from "expo-router";
 
 type HeaderProps = {
     title: string;
@@ -13,6 +14,13 @@ function Header({
                     backBtn=true,
                     onBackBtn,
                 }: HeaderProps) {
+
+    const goBack = () => {
+        if(router.canGoBack()){
+            router.back();
+        }
+    }
+
     return(
         <View
             style={{
@@ -22,7 +30,9 @@ function Header({
             }}>
             {backBtn && (
                 <Pressable
-                    onPress={onBackBtn}
+                    onPress={()=>{
+                        onBackBtn?onBackBtn():goBack()
+                    }}
                     style={{
                         // position: 'absolute',
                         width: 60,

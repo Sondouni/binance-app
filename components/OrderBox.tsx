@@ -1,5 +1,5 @@
 import {memo, useCallback, useRef, useState} from "react";
-import {InputAccessoryView, Pressable, Text, TextInput, View} from "react-native";
+import {InputAccessoryView, Pressable, StyleSheet, Text, TextInput, View} from "react-native";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import {Feather} from "@expo/vector-icons";
 import {InputAccessory} from "@/components/InputAccessory";
@@ -24,11 +24,7 @@ function OrderBox() {
 
     return(
         <View
-            style={{
-                justifyContent:'space-between',
-                height:'100%',
-                paddingHorizontal:15
-            }}
+            style={style.container}
         >
             <View>
                 <View
@@ -38,76 +34,44 @@ function OrderBox() {
                 >
                     {/*todo reanimated로 삼각형 및 컬러체인지?*/}
                     <View
-                        style={{
-                            height:30,
-                            borderColor:'rgba(119,119,119,0.5)',
-                            borderWidth:1,
-                            flexDirection:'row',
-                            alignItems:'center',
-                            borderRadius:10,
-                        }}
+                        style={style.toggle}
                     >
                         <Pressable
-                            style={{
-                                alignItems:'center',
-                                justifyContent:'center',
-                                flex:1,
-                                backgroundColor:isBuy?Colors.negative:'#FFF',
-                                height:'100%',
-                                borderRadius:10,
-                                borderTopRightRadius:50,
-                                borderBottomRightRadius:50,
-                            }}
+                            style={[{
+                                backgroundColor:isBuy?Colors.positive:'#FFF',
+
+                            },style.toggleL]}
                             onPress={()=>setIsBuy(true)}
                         >
                             <Text
-                                style={{
+                                style={[{
                                     color:isBuy?'#FFF':'#777',
-                                    fontSize:18,
-                                    fontWeight:'600'
-                                }}
+
+                                },style.toggleT]}
                             >
                                 Buy
                             </Text>
                         </Pressable>
                         <Pressable
-                            style={{
-                                alignItems:'center',
-                                justifyContent:'center',
-                                flex:1,
-                                backgroundColor:!isBuy?Colors.positive:'#FFF',
-                                height:'100%',
-                                borderRadius:10,
-                                borderTopLeftRadius:50,
-                                borderBottomLeftRadius:50,
-                            }}
+                            style={[{
+                                backgroundColor:!isBuy?Colors.negative:'#FFF',
+                            },style.toggleR]}
                             onPress={()=>setIsBuy(false)}
                         >
                             <Text
-                                style={{
+                                style={[{
                                     color:!isBuy?'#FFF':'#777',
-                                    fontSize:18,
-                                    fontWeight:'600'
-                                }}
+                                },style.toggleT]}
                             >
                                 Sell
                             </Text>
                         </Pressable>
                     </View>
                     <View
-                        style={{
-                            alignItems:'center',
-                            justifyContent:'center',
-                            paddingVertical:7,
-                            backgroundColor:'rgba(220,220,220,0.4)',
-                            borderRadius:10
-                        }}
+                        style={style.limitV}
                     >
                         <Text
-                            style={{
-                                fontSize:17,
-                                fontWeight:'600',
-                            }}
+                            style={style.limitT}
                         >
                             Limit
                         </Text>
@@ -123,8 +87,19 @@ function OrderBox() {
                             }
                         }}
                         extraText={'Price (USDT)'}
-                        onMinusPress={()=>{}}
-                        onPlusPress={()=>{}}
+                        onMinusPress={()=>{
+                            setOrderPrice(state=>{
+                                const num = Number(state);
+                                return num>0?`${num-1}`:`${num}`
+                            })
+                        }}
+                        onPlusPress={()=>{
+                            setOrderPrice(state=>{
+                                const num = Number(state);
+                                return num>0?`${num+1}`:`1`
+                            })
+                        }}
+                        needCal={true}
                     />
                     <OrderBoxInput
                         inputId={amountInputID}
@@ -137,8 +112,19 @@ function OrderBox() {
                             }
                         }}
                         extraText={'Amount'}
-                        onMinusPress={()=>{}}
-                        onPlusPress={()=>{}}
+                        onMinusPress={()=>{
+                            setAmount(state=>{
+                                const num = Number(state);
+                                return num>0?`${num-1}`:`${num}`
+                            })
+                        }}
+                        onPlusPress={()=>{
+                            setAmount(state=>{
+                                const num = Number(state);
+                                return num>0?`${num+1}`:`1`
+                            })
+                        }}
+                        needCal={true}
                     />
                 </View>
                 <View
@@ -160,25 +146,13 @@ function OrderBox() {
                         }
                     }}
                     extraText={'Total (USDT)'}
-                    onMinusPress={()=>{}}
-                    onPlusPress={()=>{}}
                 />
             </View>
             <Pressable
-                style={{
-                    backgroundColor:Colors.positive,
-                    height:40,
-                    alignItems:'center',
-                    justifyContent:'center',
-                    borderRadius:10
-                }}
+                style={style.loginV}
             >
                 <Text
-                    style={{
-                        fontSize:18,
-                        fontWeight:'600',
-                        color:'#FFF'
-                    }}
+                    style={style.loginT}
                 >
                     Log In
                 </Text>
@@ -190,3 +164,64 @@ function OrderBox() {
 
 
 export default memo(OrderBox);
+
+const style = StyleSheet.create({
+    container: {
+        justifyContent:'space-between',
+        height:'100%',
+        paddingHorizontal:15
+    },
+    toggle:{
+        height:30,
+        borderColor:'rgba(119,119,119,0.5)',
+        borderWidth:1,
+        flexDirection:'row',
+        alignItems:'center',
+        borderRadius:10,
+    },
+    toggleL:{
+        alignItems:'center',
+        justifyContent:'center',
+        flex:1,
+        height:'100%',
+        borderRadius:10,
+        borderTopRightRadius:50,
+        borderBottomRightRadius:50,
+    },
+    toggleR:{
+        alignItems:'center',
+        justifyContent:'center',
+        flex:1,
+        height:'100%',
+        borderRadius:10,
+        borderTopLeftRadius:50,
+        borderBottomLeftRadius:50,
+    },
+    toggleT:{
+        fontSize:18,
+        fontWeight:'600'
+    },
+    limitV:{
+        alignItems:'center',
+        justifyContent:'center',
+        paddingVertical:7,
+        backgroundColor:'rgba(220,220,220,0.4)',
+        borderRadius:10
+    },
+    limitT:{
+        fontSize:17,
+        fontWeight:'600',
+    },
+    loginV:{
+        backgroundColor:Colors.positive,
+        height:40,
+        alignItems:'center',
+        justifyContent:'center',
+        borderRadius:10
+    },
+    loginT:{
+        fontSize:18,
+        fontWeight:'600',
+        color:'#FFF'
+    }
+})
