@@ -1,11 +1,13 @@
-import {FlatList, View} from "react-native";
-import {useEffect, useState} from "react";
+import {FlatList, ListRenderItem, Text, View} from "react-native";
+import {useCallback, useEffect, useMemo, useState} from "react";
 import {CoinType} from "@/constants/Types";
 import CoinListRow from "@/components/CoinListRow";
 import {useRecoilState, useRecoilValue, useSetRecoilState} from "recoil";
 import {coinListState, searchedCoinList} from "@/atom/coinListAtom";
+import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
+import Colors from "@/constants/Colors";
 
-export function CoinList({data}: { data: CoinType[] }) {
+export function CoinList({data,inputRef}: { data: CoinType[],inputRef:any }) {
 
     //todo 렌더링 최적화 방안 고려
     const setCoinList = useSetRecoilState(coinListState);
@@ -45,21 +47,46 @@ export function CoinList({data}: { data: CoinType[] }) {
         }
     }, []);
 
-    useEffect(() => {
-        // console.log(coinList.length,'?');
-    }, [coinList]);
 
-    const renderItem = ({item,index}) => {
+    const renderItem:ListRenderItem<CoinType> = useCallback(({item,index}) => {
         return (
             <CoinListRow {...item} />
         )
-    }
+    },[]);
+
+    const onEmptyComponent = useMemo(()=>{
+        return (
+            <View
+                style={{
+                    flex:1,
+                    backgroundColor:'#fff',
+                    paddingTop:80,
+                    alignItems:'center',
+                }}
+            >
+                <MaterialCommunityIcons name={'file-search-outline'} size={100}/>
+                <Text style={{color:Colors.textGray,fontSize:17,fontWeight:'500',marginTop:15}}>
+                    No Records Found
+                </Text>
+            </View>
+        )
+    },[])
 
     return (
         <FlatList
             keyExtractor={item => item.symbol}
             data={coinList}
             renderItem={renderItem}
+            onScrollBeginDrag={()=>{
+                inputRef.current?.blur()
+            }}
+            ListEmptyComponent={onEmptyComponent}
+            contentContainerStyle={{
+                flexGrow:1,
+                backgroundColor:'#FFF',
+                paddingTop:10
+            }}
+            showsVerticalScrollIndicator={false}
         />
     );
 }

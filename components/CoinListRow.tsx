@@ -5,6 +5,7 @@ import {memo, useCallback} from "react";
 import {Link, router} from "expo-router";
 import {useSetRecoilState} from "recoil";
 import {orderSymbolState} from "@/atom/orderListAtom";
+import Colors from "@/constants/Colors";
 
 function CoinListRow(props: CoinType) {
 
@@ -68,7 +69,7 @@ function CoinListRow(props: CoinType) {
                     style={{
                         height:30,
                         width:100,
-                        backgroundColor:'#0ecb81',
+                        backgroundColor:Number(props.priceChangePercent)>=0?Colors.positive:Colors.negative,
                         alignItems:'center',
                         justifyContent:'center',
                         borderRadius:8,
@@ -81,7 +82,7 @@ function CoinListRow(props: CoinType) {
                             color:'#fff'
                         }}
                     >
-                        {props.priceChangePercent}
+                        {`${Number(props.priceChangePercent)>0?'+':''}${Number(props.priceChangePercent)}%`}
                     </Text>
                 </View>
 

@@ -43,6 +43,6 @@ export const searchedCoinList = selector<CoinType[]>({
     get:({get}) => {
         const coinList = get(coinListState);
         const text = get(searchCoinState);
-        return text===''?coinList:coinList.filter((coin)=> coin.name.includes(text));
+        return text===''?coinList:coinList.filter((coin)=> coin.name.includes(text.toUpperCase()));
     }
 })

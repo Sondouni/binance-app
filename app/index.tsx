@@ -1,17 +1,19 @@
-import {FlatList, SafeAreaView, StyleSheet} from 'react-native';
+import {FlatList, SafeAreaView, StyleSheet, TextInput} from 'react-native';
 
 import { Text, View } from '@/components/Themed';
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {COIN_LIST, getCoinList} from "@/assets/apis";
 import {useQuery} from "@tanstack/react-query";
 import {CoinList} from "@/components/CoinList";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import {useSetRecoilState} from "recoil";
 import {coinListState} from "@/atom/coinListAtom";
+import CoinSearchInput from "@/components/CoinSearchInput";
 
 export default function TabOneScreen() {
 
   const setCoinList = useSetRecoilState(coinListState);
+  const inputRef = useRef<TextInput>(null);
 
   const {data,isLoading,error} = useQuery({
     queryKey:[COIN_LIST],
@@ -25,7 +27,7 @@ export default function TabOneScreen() {
   }, [data]);
 
   return (
-    <SafeAreaView style={{backgroundColor:'#FFF'}}>
+    <SafeAreaView style={{backgroundColor:'#FFF',flex:1}}>
       {isLoading &&
           <View style={styles.loadingContainer}>
             <Text>
@@ -41,28 +43,9 @@ export default function TabOneScreen() {
           </View>
       }
       {!isLoading && data &&
-          <View>
-            <View
-              style={{
-                padding:20,
-              }}
-            >
-              <View
-                style={{
-                  flexDirection:'row',
-                  backgroundColor:'rgba(213,213,213,0.5)',
-                  alignItems:'center',
-                  padding:5,
-                  borderRadius:10
-                }}
-              >
-                <FontAwesome5 name="search" size={20} color={'000'} />
-                <Text>
-                  Search Coin Pairs
-                </Text>
-              </View>
-            </View>
-            <CoinList data={data}/>
+          <View style={{flex:1}}>
+            <CoinSearchInput inputRef={inputRef}/>
+            <CoinList data={data} inputRef={inputRef}/>
           </View>
       }
     </SafeAreaView>
